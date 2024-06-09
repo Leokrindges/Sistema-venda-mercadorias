@@ -38,7 +38,7 @@ public class IfrFornecedor extends javax.swing.JInternalFrame {
 
         jButton1 = new javax.swing.JButton();
         btnSalvar = new javax.swing.JButton();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jtpManutencaoFornecedor = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblFornecedor = new javax.swing.JTable();
@@ -74,6 +74,12 @@ public class IfrFornecedor extends javax.swing.JInternalFrame {
             }
         });
 
+        jtpManutencaoFornecedor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtpManutencaoFornecedorMouseClicked(evt);
+            }
+        });
+
         tblFornecedor.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -103,7 +109,7 @@ public class IfrFornecedor extends javax.swing.JInternalFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jTabbedPane1.addTab("Listagem", jPanel1);
+        jtpManutencaoFornecedor.addTab("Listagem", jPanel1);
 
         jLabel1.setText("Nome");
 
@@ -164,7 +170,7 @@ public class IfrFornecedor extends javax.swing.JInternalFrame {
                 .addContainerGap(21, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Manutenção", jPanel2);
+        jtpManutencaoFornecedor.addTab("Manutenção", jPanel2);
 
         btnConsultar.setText("Consultar");
         btnConsultar.addActionListener(new java.awt.event.ActionListener() {
@@ -222,7 +228,7 @@ public class IfrFornecedor extends javax.swing.JInternalFrame {
                                 .addComponent(tfdConsultarFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 619, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(btnPesquisar))
-                            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 754, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jtpManutencaoFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 754, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(37, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
@@ -234,7 +240,7 @@ public class IfrFornecedor extends javax.swing.JInternalFrame {
                     .addComponent(tfdConsultarFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnPesquisar))
                 .addGap(18, 18, 18)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jtpManutencaoFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(77, 77, 77)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnExcluir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -365,7 +371,7 @@ public class IfrFornecedor extends javax.swing.JInternalFrame {
         Fornecedor fornecedor = new FornecedorDAO().consultarId(idFornecedor);
 
         if (fornecedor != null) {
-            jTabbedPane1.setSelectedIndex(1);// Muda a aba manutenção
+            jtpManutencaoFornecedor.setSelectedIndex(1);// Muda a aba manutenção
             tfdNomeFornecedor.setText(fornecedor.getNome());
             tfdEmailFornecedor.setText(fornecedor.getEmail());
             tfdTelefoneForncedor.setText(fornecedor.getTelefone());
@@ -397,6 +403,10 @@ public class IfrFornecedor extends javax.swing.JInternalFrame {
 
     }//GEN-LAST:event_btnExcluirActionPerformed
 
+    private void jtpManutencaoFornecedorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtpManutencaoFornecedorMouseClicked
+        tfdNomeFornecedor.requestFocus();
+    }//GEN-LAST:event_jtpManutencaoFornecedorMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConsultar;
@@ -413,7 +423,7 @@ public class IfrFornecedor extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTabbedPane jtpManutencaoFornecedor;
     private javax.swing.JTable tblFornecedor;
     private javax.swing.JTextField tfdCnpjFornecedor;
     private javax.swing.JTextField tfdConsultarFornecedor;
