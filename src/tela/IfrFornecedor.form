@@ -184,9 +184,9 @@
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="tfdCnpjFornecedor" pref="484" max="32767" attributes="0"/>
-                                  <Component id="tfdTelefoneForncedor" pref="484" max="32767" attributes="0"/>
-                                  <Component id="tfdEmailFornecedor" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="tfdEmailFornecedor" alignment="0" pref="484" max="32767" attributes="0"/>
+                                  <Component id="tffTelefoneFornecedor" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="tffCnpjFornecedor" alignment="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -210,12 +210,12 @@
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="tfdTelefoneForncedor" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="tffTelefoneFornecedor" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="tfdCnpjFornecedor" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="tffCnpjFornecedor" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="21" max="32767" attributes="0"/>
                   </Group>
@@ -250,9 +250,9 @@
             </Component>
             <Component class="javax.swing.JTextField" name="tfdEmailFornecedor">
             </Component>
-            <Component class="javax.swing.JTextField" name="tfdTelefoneForncedor">
+            <Component class="javax.swing.JFormattedTextField" name="tffTelefoneFornecedor">
             </Component>
-            <Component class="javax.swing.JTextField" name="tfdCnpjFornecedor">
+            <Component class="javax.swing.JFormattedTextField" name="tffCnpjFornecedor">
             </Component>
           </SubComponents>
         </Container>

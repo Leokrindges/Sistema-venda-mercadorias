@@ -4,12 +4,19 @@
  */
 package tela;
 
+import apoio.ComboItem;
 import apoio.ConexaoBD;
+import apoio.Formatacao;
+import apoio.PintaCampos;
+import apoio.Validacao;
 import dao.FornecedorDAO;
 import entidade.Fornecedor;
+import java.awt.Color;
 import java.sql.Statement;
 import java.util.ArrayList;
+import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
+import javax.swing.border.Border;
 
 /**
  *
@@ -25,6 +32,10 @@ public class IfrFornecedor extends javax.swing.JInternalFrame {
     public IfrFornecedor() {
         initComponents();
         new FornecedorDAO().popularTabela(tblFornecedor, "");
+
+        Formatacao.formatarTelefone(tffTelefoneFornecedor);
+        Formatacao.formatarCnpj(tffCnpjFornecedor);
+
     }
 
     /**
@@ -49,8 +60,8 @@ public class IfrFornecedor extends javax.swing.JInternalFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         tfdEmailFornecedor = new javax.swing.JTextField();
-        tfdTelefoneForncedor = new javax.swing.JTextField();
-        tfdCnpjFornecedor = new javax.swing.JTextField();
+        tffTelefoneFornecedor = new javax.swing.JFormattedTextField();
+        tffCnpjFornecedor = new javax.swing.JFormattedTextField();
         btnConsultar = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         tfdConsultarFornecedor = new javax.swing.JTextField();
@@ -143,9 +154,9 @@ public class IfrFornecedor extends javax.swing.JInternalFrame {
                             .addComponent(jLabel4))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(tfdCnpjFornecedor, javax.swing.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE)
-                            .addComponent(tfdTelefoneForncedor, javax.swing.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE)
-                            .addComponent(tfdEmailFornecedor))))
+                            .addComponent(tfdEmailFornecedor, javax.swing.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE)
+                            .addComponent(tffTelefoneFornecedor)
+                            .addComponent(tffCnpjFornecedor))))
                 .addContainerGap(213, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -162,11 +173,11 @@ public class IfrFornecedor extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(tfdTelefoneForncedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tffTelefoneFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(14, 14, 14)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tfdCnpjFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
+                    .addComponent(jLabel4)
+                    .addComponent(tffCnpjFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(21, Short.MAX_VALUE))
         );
 
@@ -264,64 +275,26 @@ public class IfrFornecedor extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_tfdNomeFornecedorActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        boolean camposPreenchidos = false;
 
-        Fornecedor fornecedor = new Fornecedor();
-        fornecedor.setId(idFornecedor);
-
-        while (!camposPreenchidos) {
-            if (tfdNomeFornecedor.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Nome do fornecedor deve ser preenchido!");
-                tfdNomeFornecedor.requestFocus();
-                break;
-            } else {
-                fornecedor.setNome(tfdNomeFornecedor.getText());
-            }
-
-            if (tfdEmailFornecedor.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Email do fornecedor deve ser preenchido!");
-                tfdEmailFornecedor.requestFocus();
-                break;
-            } else {
-                String verificaEmail = tfdEmailFornecedor.getText();
-
-                if (verificaEmail.indexOf("@") != -1) {
-                    fornecedor.setEmail(tfdEmailFornecedor.getText());
-                } else {
-                    JOptionPane.showMessageDialog(this, "Email do fornecedor inválido!");
-                    tfdEmailFornecedor.requestFocus();
-                    break;
-                }
-            }
-
-            if (tfdTelefoneForncedor.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Telefone do fornecedor deve ser preenchido!");
-                tfdTelefoneForncedor.requestFocus();
-                break;
-            } else {
-                fornecedor.setTelefone(tfdTelefoneForncedor.getText());
-            }
-
-            if (tfdCnpjFornecedor.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "CNPJ do fornecedor deve ser preenchido!");
-                tfdCnpjFornecedor.requestFocus();
-                break;
-            } else {
-                fornecedor.setCnpj(tfdCnpjFornecedor.getText());
-            }
-
-            camposPreenchidos = true;
-        }
-
-        if (camposPreenchidos) {
+        if (validarCampos()) {
             FornecedorDAO fornecedorDAO = new FornecedorDAO();
+            Fornecedor fornecedor = new Fornecedor();
+
+            fornecedor.setNome(tfdNomeFornecedor.getText());
+            fornecedor.setEmail(tfdEmailFornecedor.getText());
+            fornecedor.setTelefone(tffTelefoneFornecedor.getText());
+            fornecedor.setCnpj(tffCnpjFornecedor.getText());
 
             if (idFornecedor == 0) { //Representa uma inserção
                 if (fornecedorDAO.salvar(fornecedor) == null) {
                     tfdNomeFornecedor.setText("");
                     tfdEmailFornecedor.setText("");
-                    tfdTelefoneForncedor.setText("");
-                    tfdCnpjFornecedor.setText("");
+                    tffTelefoneFornecedor.setText("");
+                    tffCnpjFornecedor.setText("");
+                    PintaCampos.pintaBordaCampoCinza(null, tfdNomeFornecedor, null);
+                    PintaCampos.pintaBordaCampoCinza(null, tfdEmailFornecedor, null);
+                    PintaCampos.pintaBordaCampoCinza(tffTelefoneFornecedor, null, null);
+                    PintaCampos.pintaBordaCampoCinza(tffCnpjFornecedor, null, null);
 
                     JOptionPane.showMessageDialog(this, "Registro salvo com sucesso!");
                     tfdNomeFornecedor.requestFocus();
@@ -333,8 +306,12 @@ public class IfrFornecedor extends javax.swing.JInternalFrame {
                 if (fornecedorDAO.atualizar(fornecedor) == null) {
                     tfdNomeFornecedor.setText("");
                     tfdEmailFornecedor.setText("");
-                    tfdTelefoneForncedor.setText("");
-                    tfdCnpjFornecedor.setText("");
+                    tffTelefoneFornecedor.setText("");
+                    tffCnpjFornecedor.setText("");
+                    PintaCampos.pintaBordaCampoCinza(null, tfdNomeFornecedor, null);
+                    PintaCampos.pintaBordaCampoCinza(null, tfdEmailFornecedor, null);
+                    PintaCampos.pintaBordaCampoCinza(tffTelefoneFornecedor, null, null);
+                    PintaCampos.pintaBordaCampoCinza(tffCnpjFornecedor, null, null);
 
                     JOptionPane.showMessageDialog(this, "Registro salvo com sucesso!");
                     tfdNomeFornecedor.requestFocus();
@@ -374,8 +351,8 @@ public class IfrFornecedor extends javax.swing.JInternalFrame {
             jtpManutencaoFornecedor.setSelectedIndex(1);// Muda a aba manutenção
             tfdNomeFornecedor.setText(fornecedor.getNome());
             tfdEmailFornecedor.setText(fornecedor.getEmail());
-            tfdTelefoneForncedor.setText(fornecedor.getTelefone());
-            tfdCnpjFornecedor.setText(fornecedor.getCnpj());
+            tffTelefoneFornecedor.setText(fornecedor.getTelefone());
+            tffCnpjFornecedor.setText(fornecedor.getCnpj());
 
             tfdNomeFornecedor.requestFocus();
         } else {
@@ -407,6 +384,58 @@ public class IfrFornecedor extends javax.swing.JInternalFrame {
         tfdNomeFornecedor.requestFocus();
     }//GEN-LAST:event_jtpManutencaoFornecedorMouseClicked
 
+    private boolean validarCampos() {
+
+        boolean camposPreenchidos = false;
+
+        while (!camposPreenchidos) {
+            if (tfdNomeFornecedor.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Nome do fornecedor deve ser preenchido!");
+                PintaCampos.pintaBordaCampoVermelho(null, tfdNomeFornecedor, null);
+                tfdNomeFornecedor.requestFocus();
+                camposPreenchidos = false;
+                break;
+            } else  {
+                PintaCampos.pintaBordaCampoVerde(null, tfdNomeFornecedor, null);
+            }
+
+            if (tfdEmailFornecedor.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Preencha um e-mail!");
+                PintaCampos.pintaBordaCampoVermelho(null, tfdEmailFornecedor, null);
+                tfdEmailFornecedor.requestFocus();
+                camposPreenchidos = false;
+                break;
+            } else if (!Validacao.validarEmail(tfdEmailFornecedor)) {
+                JOptionPane.showMessageDialog(this, "Email inválido!");
+                camposPreenchidos = false;
+                break;
+            }
+
+            if (!Validacao.verificaCampoFormatado(tffTelefoneFornecedor.getText(), tffTelefoneFornecedor)) {
+                JOptionPane.showMessageDialog(this, "Preencha um telefone");
+                camposPreenchidos = false;
+                break;
+            } else if (!Validacao.validarTelefone(tffTelefoneFornecedor)) {
+                JOptionPane.showMessageDialog(this, "Telefone inválido!");
+                camposPreenchidos = false;
+                break;
+            }
+
+            if (!Validacao.verificaCampoFormatado(tffCnpjFornecedor.getText(), tffCnpjFornecedor)) {
+                JOptionPane.showMessageDialog(this, "Preencha um CNPJ");
+                camposPreenchidos = false;
+                break;
+            } else if (!Validacao.validarCNPJ(tffCnpjFornecedor)) {
+                JOptionPane.showMessageDialog(this, "CNPJ inválido!");
+                camposPreenchidos = false;
+                break;
+            }
+
+            camposPreenchidos = true;
+        }
+        return camposPreenchidos;
+
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConsultar;
@@ -425,10 +454,10 @@ public class IfrFornecedor extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jtpManutencaoFornecedor;
     private javax.swing.JTable tblFornecedor;
-    private javax.swing.JTextField tfdCnpjFornecedor;
     private javax.swing.JTextField tfdConsultarFornecedor;
     private javax.swing.JTextField tfdEmailFornecedor;
     private javax.swing.JTextField tfdNomeFornecedor;
-    private javax.swing.JTextField tfdTelefoneForncedor;
+    private javax.swing.JFormattedTextField tffCnpjFornecedor;
+    private javax.swing.JFormattedTextField tffTelefoneFornecedor;
     // End of variables declaration//GEN-END:variables
 }

@@ -13,6 +13,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.border.Border;
 import apoio.ComboItem;
+import apoio.PintaCampos;
 import dao.FornecedorDAO;
 import entidade.Fornecedor;
 import apoio.Validacao;
@@ -24,6 +25,7 @@ import apoio.Validacao;
 public class IfrCompra extends javax.swing.JInternalFrame {
 
     int idCompra = 0;
+
     /**
      * Creates new form IfrCompra
      */
@@ -274,13 +276,13 @@ public class IfrCompra extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnFecharActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        System.out.println("salvar");
         if (validarCampos()) {
             CompraDAO compraDAO = new CompraDAO();
             Compra compra = new Compra();
             ComboItem ci = (ComboItem) cmbCompra.getSelectedItem();
             compra.setId(idCompra);
             compra.setData(tffDataCompra.getText());
+            compra.setFornecedorId(ci.getCodigo());
 
             if (idCompra == 0) { //Representa uma inserção
                 if (compraDAO.salvar(compra) == null) {
@@ -290,9 +292,8 @@ public class IfrCompra extends javax.swing.JInternalFrame {
 
                     JOptionPane.showMessageDialog(this, "Registro salvo com sucesso!");
                     tffDataCompra.requestFocus();
-                    Border border = BorderFactory.createLineBorder(Color.gray, 1);
-                    cmbCompra.setBorder(border);
-                    tffDataCompra.setBorder(border);
+                    PintaCampos.pintaBordaCampoCinza(tffDataCompra, null, null);
+                    PintaCampos.pintaBordaCampoCinza(null, null, cmbCompra);
                 } else {
                     JOptionPane.showMessageDialog(this, "Problemas ao salvar registro!");
                 }
@@ -305,9 +306,8 @@ public class IfrCompra extends javax.swing.JInternalFrame {
                     JOptionPane.showMessageDialog(this, "Registro salvo com sucesso!");
                     tffDataCompra.requestFocus();
                     new CompraDAO().popularTabela(tblCompra, "");
-                    Border border = BorderFactory.createLineBorder(Color.gray, 1);
-                    cmbCompra.setBorder(border);
-                    tffDataCompra.setBorder(border);
+                    PintaCampos.pintaBordaCampoCinza(tffDataCompra, null, null);
+                    PintaCampos.pintaBordaCampoCinza(null, null, cmbCompra);
 
                 } else {
                     JOptionPane.showMessageDialog(this, "Problemas ao salvar registro!");
@@ -367,15 +367,6 @@ public class IfrCompra extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jtpManutencaoCompraMouseClicked
 
     private void tffDataCompraFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tffDataCompraFocusLost
-//        if (jtpManutencaoCompra.getSelectedIndex() == 0) {// Muda a aba manutenção
-//            Border border = BorderFactory.createLineBorder(Color.gray, 1);
-//            tffDataCompra.setBorder(border);
-//            telaEstaFechada = true;
-//        } else if (!telaEstaFechada) {
-//            tffDataCompra.requestFocus();
-//            validarCampos();
-//            telaEstaFechada = false;
-//        }
     }//GEN-LAST:event_tffDataCompraFocusLost
 
     private void btnFecharMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnFecharMouseClicked
@@ -386,39 +377,30 @@ public class IfrCompra extends javax.swing.JInternalFrame {
         boolean camposPreenchidos = false;
         ComboItem ci = (ComboItem) cmbCompra.getSelectedItem();
 
-        String dataSemFormatacao = Formatacao.removerFormatacao(tffDataCompra.getText());
-        String dataSemEspacoBranco = dataSemFormatacao.replaceAll(" ", "");
-
         while (!camposPreenchidos) {
-            if (dataSemEspacoBranco.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Preencha uma data de compra");
-                tffDataCompra.requestFocus();
-                Border border = BorderFactory.createLineBorder(Color.RED, 2);
-                tffDataCompra.setBorder(border);
+
+            if (!Validacao.verificaCampoFormatado(tffDataCompra.getText(), tffDataCompra)) {
+                JOptionPane.showMessageDialog(this, "Preencha uma data");
+                PintaCampos.pintaBordaCampoVermelho(tffDataCompra, null, null);
                 camposPreenchidos = false;
                 break;
             } else if (!Validacao.validarDataFormatada(tffDataCompra.getText())) {
                 JOptionPane.showMessageDialog(this, "Data inválida!");
-                tffDataCompra.requestFocus();
-                Border border = BorderFactory.createLineBorder(Color.RED, 2);
-                tffDataCompra.setBorder(border);
+                PintaCampos.pintaBordaCampoVermelho(tffDataCompra, null, null);
                 camposPreenchidos = false;
                 break;
             } else {
-                Border border = BorderFactory.createLineBorder(Color.green, 2);
-                tffDataCompra.setBorder(border);
+                PintaCampos.pintaBordaCampoVerde(tffDataCompra, null, null);
             }
 
             if (ci.getCodigo() == 0) {
                 JOptionPane.showMessageDialog(this, "Fornecedor deve ser preenchido");
                 cmbCompra.requestFocus();
-                Border border = BorderFactory.createLineBorder(Color.RED, 2);
-                cmbCompra.setBorder(border);
+                PintaCampos.pintaBordaCampoVermelho(null, null, cmbCompra);
                 camposPreenchidos = false;
                 break;
             } else {
-                Border border = BorderFactory.createLineBorder(Color.green, 2);
-                cmbCompra.setBorder(border);
+                PintaCampos.pintaBordaCampoVerde(null, null, cmbCompra);
             }
 
             camposPreenchidos = true;

@@ -5,6 +5,7 @@
 package apoio;
 
 import javax.swing.JFormattedTextField;
+import javax.swing.JTextField;
 
 /**
  *
@@ -34,13 +35,17 @@ public class Validacao {
         return cpf.equals(cpf.substring(0, 9) + digito1.toString() + digito2.toString());
     }
 
-    public static boolean validarCNPJ(String cnpj) {
-        if ((cnpj == null) || (cnpj.length() != 14)) {
+    public static boolean validarCNPJ(JFormattedTextField campo) {
+        String CnpjSemFormatacao = Formatacao.removerFormatacao(campo.getText());
+
+        if ((campo.getText().isEmpty()) || (CnpjSemFormatacao.length() != 14)) {
+            PintaCampos.pintaBordaCampoVermelho(campo, null, null);
+            campo.requestFocus();
             return false;
         }
-        Integer digito1 = calcularDigito(cnpj.substring(0, 12), pesoCNPJ);
-        Integer digito2 = calcularDigito(cnpj.substring(0, 12) + digito1, pesoCNPJ);
-        return cnpj.equals(cnpj.substring(0, 12) + digito1.toString() + digito2.toString());
+        Integer digito1 = calcularDigito(CnpjSemFormatacao.substring(0, 12), pesoCNPJ);
+        Integer digito2 = calcularDigito(CnpjSemFormatacao.substring(0, 12) + digito1, pesoCNPJ);
+        return CnpjSemFormatacao.equals(CnpjSemFormatacao.substring(0, 12) + digito1.toString() + digito2.toString());
     }
 
     public static boolean validarDataDMA(int d, int m, int a) {
@@ -70,10 +75,36 @@ public class Validacao {
 
     public static boolean validarTelefone(JFormattedTextField campo) {
         if (campo.getText().trim().length() < 15) {
+            PintaCampos.pintaBordaCampoVermelho(campo, null, null);
+            campo.requestFocus();
             return false;
         } else {
+            PintaCampos.pintaBordaCampoVerde(campo, null, null);
             return true;
         }
+    }
+
+    public static boolean validarEmail(JTextField campo) {
+        if (campo.getText().indexOf("@") != -1) {
+            PintaCampos.pintaBordaCampoVerde(null, campo, null);
+            return true;
+        } else {
+            campo.requestFocus();
+            PintaCampos.pintaBordaCampoVermelho(null, campo, null);
+            return false;
+        }
+    }
+
+    public static boolean verificaCampoFormatado(String conteudo, JFormattedTextField campoFormatado) {
+
+        String conteudoSemFormatacao = Formatacao.removerFormatacao(campoFormatado.getText());
+        String conteudoSemEspacoBranco = conteudoSemFormatacao.replaceAll(" ", "");
+
+        if (conteudoSemEspacoBranco.isEmpty()) {
+            PintaCampos.pintaBordaCampoVermelho(campoFormatado, null, null);
+            return false;
+        }
+        return true;
     }
 
 }
